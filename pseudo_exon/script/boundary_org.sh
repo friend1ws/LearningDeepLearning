@@ -22,5 +22,7 @@ python script/boundary_org_proc2.py data/boundary_org/exon.bed.gz data/boundary_
 
 awk '$9 >= 5.28 && $12 >= 4.83 && $9 + $12 >= 11.87' data/boundary_org/boundary_proc.tsv > data/boundary_org/boundary_proc_filt.tsv
 
+python script/get_3p_seq_final.py data/boundary_org/boundary_proc_filt.tsv data/boundary_org/boundary_org.fa 150
+
 # python script/boundary_org_proc.py data/boundary_org/boundary_raw.bed.gz data/boundary_org/boundary_fasta.tsv data/boundary_org/boundary_fasta_5_score.tsv data/boundary_org/boundary_fasta_3_score.tsv > data/boundary_org/boundary_proc.tsv
 
