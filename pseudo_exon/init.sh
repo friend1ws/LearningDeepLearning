@@ -5,12 +5,12 @@ mkdir db
 mkdir script
 mkdir data
 
-sudo apt-get update
-sudo apt-get install python-pip
-sudo apt-get install zlib1g-dev
-sudo apt-get install libbz2-dev
-sudo apt-get install liblzma-dev
-sudo apt-get install bedtools
+sudo apt-get update -y
+sudo apt-get install python-pip -y
+sudo apt-get install zlib1g-dev -y
+sudo apt-get install libbz2-dev -y
+sudo apt-get install liblzma-dev -y
+sudo apt-get install bedtools -y
 pip install annot_utils
 
 WORKDIR=`pwd`
@@ -27,7 +27,7 @@ cd $WORKDIR
 
 # install maxentscan
 cd bin
-wget wget http://genes.mit.edu/burgelab/maxent/download/fordownload.tar.gz
+wget http://genes.mit.edu/burgelab/maxent/download/fordownload.tar.gz
 tar zxvf fordownload.tar.gz
 mv fordownload maxent
 export PATH=~/bin/maxent:$PATH

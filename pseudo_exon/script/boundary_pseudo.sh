@@ -2,49 +2,44 @@
 
 set -x
 
-
 if [ ! -d data/boundary_pseudo ]
 then
     mkdir -p data/boundary_pseudo
 fi
 
-<<_
 annot_utils coding --genome_id hg38 data/boundary_pseudo/coding_raw.bed.gz
 
 zcat data/boundary_pseudo/coding_raw.bed.gz | awk '$5 == "intron" {print}' > data/boundary_pseudo/coding_raw.intron.bed
 
 bedtools getfasta \
-    -fi  ~/db/GRCh38.primary_assembly.genome.fa \
+    -fi  db/GRCh38.primary_assembly.genome.fa \
     -bed data/boundary_pseudo/coding_raw.intron.bed \
     -fo data/boundary_pseudo/coding_raw.intron.fasta.tsv \
     -tab -s \
     2>/dev/null
 
-_
 
 WORKDIR=`pwd`
 
-# python script/SS_scan.py data/boundary_pseudo/coding_raw.intron.fasta.tsv donor > data/boundary_pseudo/intron_GT_seq.tsv
+python script/SS_scan.py data/boundary_pseudo/coding_raw.intron.fasta.tsv donor > data/boundary_pseudo/intron_GT_seq.tsv
 
-# cut -f 8 data/boundary_pseudo/intron_GT_seq.tsv > data/boundary_pseudo/intron_GT_seq.only_seq.tsv
+cut -f 8 data/boundary_pseudo/intron_GT_seq.tsv > data/boundary_pseudo/intron_GT_seq.only_seq.tsv
 
-# cd bin/maxent
-# perl score5.pl ${WORKDIR}/data/boundary_pseudo/intron_GT_seq.only_seq.tsv > ${WORKDIR}/data/boundary_pseudo/intron_GT_seq.seq2score.tsv
-
-# cd ${WORKDIR}
+cd ${WORKDIR}/bin/maxent
+perl score5.pl ${WORKDIR}/data/boundary_pseudo/intron_GT_seq.only_seq.tsv > ${WORKDIR}/data/boundary_pseudo/intron_GT_seq.seq2score.tsv
+cd ${WORKDIR}
 
 python script/filter_junc.py data/boundary_pseudo/intron_GT_seq.tsv data/boundary_pseudo/intron_GT_seq.seq2score.tsv 5.12 > data/boundary_pseudo/intron_GT_seq.filt.tsv
 
 
 
-# python script/SS_scan.py data/boundary_pseudo/coding_raw.intron.fasta.tsv acceptor > data/boundary_pseudo/intron_AG_seq.tsv
+python script/SS_scan.py data/boundary_pseudo/coding_raw.intron.fasta.tsv acceptor > data/boundary_pseudo/intron_AG_seq.tsv
 
-# cut -f 8 data/boundary_pseudo/intron_AG_seq.tsv > data/boundary_pseudo/intron_AG_seq.only_seq.tsv
+cut -f 8 data/boundary_pseudo/intron_AG_seq.tsv > data/boundary_pseudo/intron_AG_seq.only_seq.tsv
 
-# cd bin/maxent
-# perl score3.pl ${WORKDIR}/data/boundary_pseudo/intron_AG_seq.only_seq.tsv > ${WORKDIR}/data/boundary_pseudo/intron_AG_seq.seq2score.tsv
-
-# cd ${WORKDIR}
+cd ${WORKDIR}/bin/maxent
+perl score3.pl ${WORKDIR}/data/boundary_pseudo/intron_AG_seq.only_seq.tsv > ${WORKDIR}/data/boundary_pseudo/intron_AG_seq.seq2score.tsv
+cd ${WORKDIR}
 
 python script/filter_junc.py data/boundary_pseudo/intron_AG_seq.tsv data/boundary_pseudo/intron_AG_seq.seq2score.tsv 4.87 > data/boundary_pseudo/intron_AG_seq.filt.tsv
 

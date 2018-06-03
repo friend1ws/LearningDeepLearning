@@ -17,9 +17,7 @@ with open(boundary_file, 'r') as hin:
 
 hout.close()
 
-hout = open(output_file + ".tmp.bed2", 'w')
-subprocess.call(["bedtools", "getfasta", "-fi", "db/GRCh38.primary_assembly.genome.fa", "-bed", output_file + ".tmp.bed", "-s", "-tab"], stdout = hout)
-hout.close()
+subprocess.call(["bedtools", "getfasta", "-fi", "db/GRCh38.primary_assembly.genome.fa", "-bed", output_file + ".tmp.bed", "-fo", output_file + ".tmp.bed2", "-s", "-tab"])
 
 hout = open(output_file, 'w')
 subprocess.call(["cut", "-f", "2", output_file + ".tmp.bed2"], stdout = hout)
